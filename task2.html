@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Now</title>
+   <link rel="stylesheet" href="WEATHER1.css">
+</head>
+<body>
+    <div class="header">Weather Now</div>
+    <div class="search-bar">
+        <input type="text" id="cityInput" placeholder="Enter city name">
+        <button onclick="fetchWeather()">Search</button>
+    </div>
+    <div class="weather-info">
+        <div class="temperature" id="temperature">--°C</div>
+        <div class="condition" id="condition">--</div>
+        <div class="icon" id="icon">🌤</div>
+    </div>
+    <div class="current-time" id="currentTime">--:--</div>
+
+    <script>
+        async function fetchWeather() {
+            const city = document.getElementById('cityInput').value;
+            if (!city) {
+                alert('Please enter a city name');
+                return;
+            }
+
+            const apiKey = 'YOUR_API_KEY'; // Replace with your OpenWeatherMap API key
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('City not found');
+                }
+
+                const data = await response.json();
+
+                const temperature = data.main.temp;
+                const condition = data.weather[0].main;
+                const iconCode = data.weather[0].icon;
+                const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+
+                // Update UI with real data
+                document.getElementById('temperature').textContent = `${temperature}°C`;
+                document.getElementById('condition').textContent = condition;
+                document.getElementById('icon').innerHTML = `<img src="${iconUrl}" alt="${condition}">`;
+
+                // Change background color based on weather condition
+                let backgroundColor;
+                switch (condition.toLowerCase()) {
+                    case 'clear':
+                        backgroundColor = '#87CEEB'; // Light blue for sunny
+                        break;
+                    case 'clouds':
+                        backgroundColor = '#B0C4DE'; // Light gray for cloudy
+                        break;
+                    case 'rain':
+                        backgroundColor = '#778899'; // Gray for rainy
+                        break;
+                    case 'snow':
+                        backgroundColor = '#FFF'; // White for snowy
+                        break;
+                    default:
+                        backgroundColor = '#D3D3D3'; // Default light gray
+                }
+                document.body.style.backgroundColor = backgroundColor;
+
+                // Update current time
+                const now = new Date();
+                document.getElementById('currentTime').textContent = now.toLocaleTimeString();
+
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+    </script>
+</body>
+</html>

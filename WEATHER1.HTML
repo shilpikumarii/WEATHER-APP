@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Now</title>
+   <link rel="stylesheet" href="WEATHER1.css">
+</head>
+<body>
+    <div class="header">Weather Now</div>
+    <div class="search-bar">
+        <input type="text" id="cityInput" placeholder="Enter city name">
+        <button onclick="fetchWeather()">Search</button>
+    </div>
+    <div class="weather-info">
+        <div class="temperature" id="temperature">--°C</div>
+        <div class="condition" id="condition">--</div>
+        <div class="icon" id="icon">🌤</div>
+    </div>
+    <div class="current-time" id="currentTime">--:--</div>
+
+    <script>
+        function fetchWeather() {
+            const city = document.getElementById('cityInput').value;
+            if (!city) {
+                alert('Please enter a city name');
+                return;
+            }
+
+            // Mock API response for demonstration purposes
+            const mockResponse = {
+                temperature: 25,
+                condition: 'Sunny',
+                icon: '☀',
+                backgroundColor: '#87CEEB', // Light blue for sunny
+            };
+
+            // Update UI with mock data
+            document.getElementById('temperature').textContent = `${mockResponse.temperature}°C`;
+            document.getElementById('condition').textContent = mockResponse.condition;
+            document.getElementById('icon').textContent = mockResponse.icon;
+            document.body.style.backgroundColor = mockResponse.backgroundColor;
+
+            // Update current time
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString();
+        }
+    </script>
+</body>
+</html>
